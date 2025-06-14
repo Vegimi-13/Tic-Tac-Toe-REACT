@@ -12,6 +12,8 @@ const initialGameBoard =[
     [null,null,null]
 ]
 
+
+
 //helper function
 function deriveActivePlayer(gameTurns){
     let currentPlayer = 'X'; 
@@ -26,19 +28,39 @@ function deriveActivePlayer(gameTurns){
 function App() {
   const [gameTurns, setgameTurns] = useState([]);
 
+  // console.log(initialGameBoard);
+  console.log(gameTurns);
+  // console.log(gameBoard);
+  
+
+
+  
+  
+
   // const [activePlayer, setActivePlayer] = useState("O");
 
   const activePlayer = deriveActivePlayer(gameTurns);
 
 
-  let gameBoard = initialGameBoard;
+  let gameBoard = [...initialGameBoard.map((array)=> [...array])];
+  console.log(gameBoard);
+  
 
   for(const turn of gameTurns){
       const{square, player} = turn;
       const{row,col} = square;
+      // console.log("Square", square);
+      // console.log("turn", turn);
+      
+      
 
       gameBoard[row][col] = player; 
+      console.log(player);
+      
     }
+
+
+    
 
     
   let winner;
@@ -56,6 +78,7 @@ function App() {
 
   const hasDraw = gameTurns.length === 9 && !winner;
 
+  
  
 
 
@@ -74,17 +97,27 @@ function App() {
 
       const currentPlayer = deriveActivePlayer(prevTurns);
       
-      const updatedTurns = [{square:{ row:rowIndex, col: colIndex}, player:currentPlayer}
+      const updatedTurns = [{square:{ row:rowIndex, col: colIndex}, 
+                            player:currentPlayer}
                             ,...prevTurns]
     
       
       
      return updatedTurns;
+   
+     
 
     }); 
 
     
+
+   
+    
   }
+   function handleRestart(){
+      setgameTurns([]);
+    }
+
 
   return (
     <main>
@@ -94,7 +127,7 @@ function App() {
           <Player name="Player 2" symbol="X" isActive={activePlayer === "X"} />
         </ol>
         {/* e ka kriju nje onSelectSquare prop ne komponentin Gameboard edhe e ka pass handleSelectSquare si funsksion */}
-        {(winner || hasDraw) && <GameOver winner={winner}/>}
+        {(winner || hasDraw) && <GameOver winner={winner} onRestart={handleRestart}/>}
         <GameBoard
           onSelectSquare={handleSelectSquare}
           board={gameBoard}
