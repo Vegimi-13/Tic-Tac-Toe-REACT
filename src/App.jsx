@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import Player from "./components/Player";
 import GameBoard from "./components/GameBoard";
+import GameOver from './components/GameOver';
 import Log from "./components/Log";
 import { WINNING_COMBINATIONS } from "./winning-combinations";
 
@@ -49,9 +50,11 @@ function App() {
 
 
      if(firstSquareSymbol && firstSquareSymbol === secondSquareSymbol && firstSquareSymbol === thirdSquareSymbol){
-    winner = firstSquareSymbol;
+         winner = firstSquareSymbol;
+      }
   }
-  }
+
+  const hasDraw = gameTurns.length === 9 && !winner;
 
  
 
@@ -91,7 +94,7 @@ function App() {
           <Player name="Player 2" symbol="X" isActive={activePlayer === "X"} />
         </ol>
         {/* e ka kriju nje onSelectSquare prop ne komponentin Gameboard edhe e ka pass handleSelectSquare si funsksion */}
-        {winner && <p>Player {winner} has won! </p>}
+        {(winner || hasDraw) && <GameOver winner={winner}/>}
         <GameBoard
           onSelectSquare={handleSelectSquare}
           board={gameBoard}
